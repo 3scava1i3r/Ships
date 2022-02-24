@@ -22,7 +22,7 @@ function MenuItems() {
         <NavLink to="/gen">👛 Gen NFT</NavLink>
       </Menu.Item>
       <Menu.Item key="/engine">
-        <NavLink to="/engine">🏦 Get an Engine</NavLink>
+        <NavLink to="/engine">🏦 Make Engine</NavLink>
       </Menu.Item>
       <Menu.Item key="shell">
         <NavLink to="/shell">💵 Get Shell</NavLink>
