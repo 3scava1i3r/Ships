@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
-import React from "react";
-import { Select } from 'antd';
+import React, { useState } from "react";
+import { Select, Input, Button } from 'antd';
+import {useWeb3Contract} from "react-moralis";
+
 
 const { Option } = Select;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
+const DInterestAbi = require("../artifacts/DInterest.json")
+
 
 const poolInfo = [
   {
@@ -55,20 +56,70 @@ const poolInfo = [
 
 export default function GenEngine() {
 
+  const [Pool, setPool] = useState("");
+  const [Amount, setAmount] = useState("")
+  const [Time, setTime] = useState("")
+
+
+  const { data, error, runContractFunction, isFetching, isLoading } =
+    useWeb3Contract({
+      abi: DInterestAbi.abi,
+      contractAddress: Pool,
+      functionName: "deposit",
+      params: {Amount , },
+    }); 
+
+  function handleChange(gg) {
+    console.log(gg);
+    setPool(gg.value);
+  }
+
+  const type = (ty) => {
+    console.log(ty.target.value);
+    setAmount(ty.target.value)
+  }
+
+
+  const testbtn = () => {
+    console.log(Amount + " " + Pool + " " + Time);
+
+
+  };
+
+
+  const time = (im) => {
+    console.log(im.target.value)
+
+    let ms = Date.now();
+    console.log(Math.trunc(ms/1000));
+    console.log(Math.trunc(ms / 1000) + im.target.value * 86400);
+
+    var gg = Math.trunc(ms / 1000) + (im.target.value * 86400);
+    setTime(gg);
+    console.log(Time)
+    
+  }
   return (
     <>
+      <Input placeholder="Amount" style={{ width: 150 }} onChange={type} />
+      <Input placeholder="Time in days" style={{ width: 150 }} onChange={time} />
       <Select
-        defaultValue="Aave DAI"
+        labelInValue
+        defaultValue={poolInfo[0].address}
         style={{ width: 120 }}
         onChange={handleChange}
       >
-        <Option value={poolInfo[0]}>{poolInfo[0].tokenSymbol}</Option>
-        <Option value={poolInfo[1]}>{poolInfo[1].tokenSymbol}</Option>
-        <Option value={poolInfo[2]}>{poolInfo[2].tokenSymbol}</Option>
-        <Option value={poolInfo[3]}>{poolInfo[3].tokenSymbol}</Option>
-        <Option value={poolInfo[4]}>{poolInfo[4].tokenSymbol}</Option>
-        <Option value={poolInfo[5]}>{poolInfo[5].tokenSymbol}</Option>
+        <Option value={poolInfo[0].address}>{poolInfo[0].tokenSymbol}</Option>
+        <Option value={poolInfo[1].address}>{poolInfo[1].tokenSymbol}</Option>
+        <Option value={poolInfo[2].address}>{poolInfo[2].tokenSymbol}</Option>
+        <Option value={poolInfo[3].address}>{poolInfo[3].tokenSymbol}</Option>
+        <Option value={poolInfo[4].address}>{poolInfo[4].tokenSymbol}</Option>
+        <Option value={poolInfo[5].address}>{poolInfo[5].tokenSymbol}</Option>
       </Select>
+
+      {/* <button onClick={console.log("haha")}>Let's Mint some</button> */}
+
+      <Button onClick={testbtn}>testing buttons</Button>
     </>
   );
 }
